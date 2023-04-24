@@ -1,0 +1,41 @@
+<html layout:decorate="@{layout}">
+
+
+
+<div layout:fragment="main-content" class="flex-shrink-0 p-3 bg-white" style="width: 1120px;">
+    <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+        <span class="fs-5 fw-semibold">Accept Payments - Payment Status</span>
+    </a>
+
+    <h3 class="mt-4 mb-3">Payment Status</h3>
+
+    <div th:class="'alert alert-' +  ${transStatus.responseCode == '00' ? 'success' : 'danger'}"
+        th:text="${transStatus.responseDescription}" role="alert">
+    </div>
+
+    <table class="table table-bordered" style="max-width: 500px;">
+        <tbody>
+            <tr>
+                <td>Item Name</td>
+                <td th:text="${trans.paymentItemName}"></td>
+            </tr>
+            <tr>
+                <td>Amount</td>
+                <td th:text="${trans.displayAmount}"></td>
+            </tr>
+            <tr>
+                <td>Transaction Reference</td>
+                <td th:text="${trans.reference}"></td>
+            </tr>
+            <tr>
+                <td>Payment Reference</td>
+                <td th:text="${transStatus.paymentReference}"></td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>
+
+
+
+</html>

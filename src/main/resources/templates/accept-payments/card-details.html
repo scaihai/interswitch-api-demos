@@ -1,0 +1,58 @@
+<html layout:decorate="@{layout}">
+
+
+
+<div layout:fragment="main-content" class="flex-shrink-0 p-3 bg-white" style="width: 1120px;">
+    <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+        <span class="fs-5 fw-semibold">Accept Payments - Card Payments API</span>
+    </a>
+
+    <h3 class="mt-4 mb-3">Card Details</h3>
+
+    <form th:action="@{/accept-payments/process-card}" th:object="${card}" method="post" class="row g-3" style="width: 50%">
+        <div class="col-12">
+            <label class="form-label">Card Number</label>
+            <input th:field="*{cardNum}" class="form-control" placeholder="0000 0000 0000 0000" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Expiry Month</label>
+            <select th:field="*{expiryMonth}" class="form-select">
+                <option th:value="${null}" selected>Choose...</option>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Expiry Year</label>
+            <input th:field="*{expiryYear}" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">CVV</label>
+            <input th:field="*{cvv}" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">PIN</label>
+            <input th:field="*{pin}" class="form-control" />
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Pay Now</button>
+        </div>
+    </form>
+</div>
+
+
+
+</html>

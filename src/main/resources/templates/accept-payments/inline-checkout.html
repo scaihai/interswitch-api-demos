@@ -1,0 +1,44 @@
+<html layout:decorate="@{layout}">
+
+
+
+    <div layout:fragment="main-content" class="flex-shrink-0 p-3 bg-white" style="width: 1120px;">
+        <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold">Accept Payments - Inline Checkout</span>
+        </a>    
+    
+        <h3 class="mt-4 mb-3">Order Summary</h3>
+
+        <div id="alert" role="alert"></div>
+
+        <table class="table table-bordered" style="max-width: 500px;">
+            <tbody>
+                <tr>
+                    <td>Item Name</td>
+                    <td th:text="${trans.paymentItemName}"></td>
+                </tr>
+                <tr>
+                    <td>Amount</td>
+                    <td th:text="${trans.displayAmount}"></td>
+                </tr>
+                <tr>
+                    <td>Transaction Reference</td>
+                    <td th:text="${trans.reference}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <form id="payment-form">
+            <input name="merchant_code" th:value="${merchantCode}" type="hidden" />
+            <input name="pay_item_id" th:value="${trans.paymentItemId}" type="hidden" />
+            <input name="site_redirect_url" value="http://localhost:8080/accept-payments/callback" type="hidden" />
+            <input name="txn_ref" th:value="${trans.reference}" type="hidden" />
+            <input name="amount" th:value="${trans.amount}" type="hidden" />
+            <input name="currency" th:value="${trans.currency}" type="hidden" />
+            <input type="button" class="btn btn-primary" onclick="inlineCheckout()" value="Make Payment" />
+        </form>
+    </div>
+
+
+
+</html>
