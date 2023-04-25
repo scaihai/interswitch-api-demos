@@ -42,7 +42,7 @@ public class CardService {
                 .header(HttpHeaders.AUTHORIZATION, authorization)
                 .field("grant_type", "client_credentials")
                 .asString().getBody();
-        utils.log("Access Token Response: \n" + response, logger);
+        // utils.log("Access Token Response: \n" + response, logger);
         return utils.jsonToObject(response, AccessTokenResponse.class).getAccessToken();
     }
 }

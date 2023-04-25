@@ -24,6 +24,9 @@ public class TransactionService {
     @Value("${interswitch.merchant-code}")
     public String merchantCode;
 
+    @Value("${interswitch.payment-item-id}")
+    private String paymentItemId;
+
     private Transaction transaction;
 
     private Logger logger = LoggerFactory.getLogger(TransactionService.class);
@@ -37,7 +40,7 @@ public class TransactionService {
         transaction.setAmount(10000L); // 100 naira
         transaction.setDisplayAmount(utils.formatAmount(transaction.getAmount()));
         transaction.setCurrency("566");
-        transaction.setPaymentItemId("Default_Payable_MX114253");
+        transaction.setPaymentItemId(paymentItemId);
         transaction.setPaymentItemName("Perfume");
         transaction.setStatus(Transaction.Status.PENDING);
         return transaction;
