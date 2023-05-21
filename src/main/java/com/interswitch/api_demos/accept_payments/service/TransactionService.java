@@ -1,6 +1,5 @@
 package com.interswitch.api_demos.accept_payments.service;
 
-import java.util.TreeSet;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -24,15 +23,6 @@ import kong.unirest.json.JSONObject;
 @Service
 public class TransactionService {
 
-    @Value("${interswitch.transaction-status-url}")
-    private String transactionStatusUrl;
-
-    @Value("${interswitch.pay-bill-url}")
-    private String payBillUrl;
-
-    @Value("${interswitch.access-token-url}")
-    private String accessTokenUrl;
-
     @Value("${interswitch.merchant-code}")
     public String merchantCode;
 
@@ -45,17 +35,24 @@ public class TransactionService {
     @Value("${interswitch.secret-key}")
     private String secretKey;
 
+    @Value("${interswitch.transaction-status-url}")
+    private String transactionStatusUrl;
+
+    @Value("${interswitch.pay-bill-url}")
+    private String payBillUrl;
+
+    @Value("${interswitch.access-token-url}")
+    private String accessTokenUrl;
+
+    @Value("${interswitch.redirect-url}")
+    private String redirectUrl;
+
     @Autowired
     private Utils utils;
 
     private Transaction transaction;
 
     private Logger logger = LoggerFactory.getLogger(TransactionService.class);
-
-//    static {
-//        Unirest.config().proxy("172.16.10.20", 8080);
-//        Unirest.config().verifySsl(false);
-//    }
 
     public Transaction createTransaction() {
         transaction = new Transaction();
@@ -79,7 +76,8 @@ public class TransactionService {
         json.put("payableCode", paymentItemId);
         json.put("amount", transaction.getAmount());
         json.put("currencyCode", transaction.getCurrency());
-        json.put("redirectUrl", "http://localhost:8080/callback");
+        json.put("transactionReference", transaction.getReference());
+        json.put("redirectUrl", redirectUrl);
         json.put("customerId", "johndoe@gmail.com");
         json.put("customerEmail", "johndoe@gmail.com");
 
@@ -134,14 +132,11 @@ public class TransactionService {
         byte[] credentials = (clientId + ":" + secretKey).getBytes();
         String base64Encoded = utils.base64Encode(credentials);
         String authorization = "Basic " + base64Encoded;
-        System.out.println(">>> About to get access token: " + authorization);
-        System.out.println(">>> URL: " + accessTokenUrl);
         String response = Unirest.post(accessTokenUrl)
                 .header(HttpHeaders.AUTHORIZATION, authorization)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .field("grant_type", "client_credentials")
                 .asString().getBody();
-        System.out.println("Access token: " + response);
         return utils.jsonToObject(response, AccessTokenResponse.class).getAccessToken();
     }
 }

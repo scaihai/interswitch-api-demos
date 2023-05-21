@@ -26,9 +26,16 @@
                 <td th:text="${trans.reference}"></td>
             </tr>
             <tr>
-                <td>Link sent to Customer</td>
+                <td>Email to Customer</td>
                 <td>
-                    <a th:href="${payBillUrl}" th:text="${payBillUrl}"></a>
+                    <pre>
+Dear John Doe,
+
+Please settle your bill by clicking here:
+<a th:href="${payBillUrl}" th:text="${payBillUrl}"></a>
+
+Thank you.
+                    </pre>
                 </td>
             </tr>
         </tbody>
