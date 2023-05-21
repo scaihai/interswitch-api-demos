@@ -4,10 +4,12 @@
 
 <div layout:fragment="main-content" class="flex-shrink-0 p-3 bg-white" style="width: 1120px;">
     <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-        <span class="fs-5 fw-semibold">Accept Payments - Card Payments API</span>
+        <span class="fs-5 fw-semibold">Accept Payments - Pay Bill</span>
     </a>
 
     <h3 class="mt-4 mb-3">Order Summary</h3>
+
+    <div id="alert" role="alert"></div>
 
     <table class="table table-bordered" style="max-width: 500px;">
         <tbody>
@@ -23,12 +25,14 @@
                 <td>Transaction Reference</td>
                 <td th:text="${trans.reference}"></td>
             </tr>
+            <tr>
+                <td>Link sent to Customer</td>
+                <td>
+                    <a th:href="${payBillUrl}" th:text="${payBillUrl}"></a>
+                </td>
+            </tr>
         </tbody>
     </table>
-
-    <a href="/accept-payments/card-details" class="btn btn-primary">
-        Make Payment
-    </a>
 </div>
 
 

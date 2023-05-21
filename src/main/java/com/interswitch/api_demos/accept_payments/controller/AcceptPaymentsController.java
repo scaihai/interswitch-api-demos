@@ -7,14 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.interswitch.api_demos.accept_payments.dto.Card;
 import com.interswitch.api_demos.accept_payments.dto.InitialTransactionResponse;
+import com.interswitch.api_demos.accept_payments.dto.Transaction;
 import com.interswitch.api_demos.accept_payments.dto.TransactionStatusResponse;
-import com.interswitch.api_demos.accept_payments.service.CardService;
 import com.interswitch.api_demos.accept_payments.service.TransactionService;
 
 @Controller
@@ -25,9 +23,6 @@ public class AcceptPaymentsController {
 
     @Autowired
     private TransactionService transactionService;
-
-    @Autowired
-    private CardService cardService;
 
     @Value("${interswitch.merchant-code}")
     public String merchantCode;
@@ -46,19 +41,16 @@ public class AcceptPaymentsController {
         return ACCEPT_PAYMENTS + "web-redirect";
     }
 
-    @GetMapping("/card-payments-api")
-    public String cardPaymentsApi(Model model) {
-        model.addAttribute("trans", transactionService.createTransaction());
-        return ACCEPT_PAYMENTS + "card-payments-api";
+    @GetMapping("/pay-bill")
+    public String payWithUssd(Model model) {
+        Transaction transaction = transactionService.createTransaction();
+        model.addAttribute("trans", transaction);
+        model.addAttribute("payBillUrl", transactionService.createLink(transaction));
+        return ACCEPT_PAYMENTS + "pay-bill";
     }
 
-    @GetMapping("/card-details")
-    public String cardDetails(Model model) {
-        model.addAttribute("card", new Card());
-        return ACCEPT_PAYMENTS + "card-details";
-    }
-
-    @PostMapping("/callback") // Called by the payment gateway
+    // Called by the payment gateway during wed-redirect flow
+    @PostMapping("/callback")
     public String processCallback(HttpServletRequest request, Model model) {
         InitialTransactionResponse initialTransResponse = new InitialTransactionResponse();
         initialTransResponse.setTxnref(request.getParameter("txnref"));
@@ -67,14 +59,5 @@ public class AcceptPaymentsController {
         model.addAttribute("trans", transactionService.getTransaction());
         model.addAttribute("transStatus", transStatusResponse);
         return ACCEPT_PAYMENTS + "status";
-    }
-
-    @PostMapping("/process-card")
-    public String processCard(@ModelAttribute("card") Card card, Model model) {
-        System.out.println(">>> Card Pan: " + card.getCardNum());
-        cardService.processCard(card);
-        model.addAttribute("card", card);
-        return ACCEPT_PAYMENTS + "card-details";
-        // return ACCEPT_PAYMENTS + "status";
     }
 }
